@@ -1,6 +1,11 @@
 import React, { useState, useEffect } from "react";
+import APIService from "../services/APIService";
 
-const AudioRecorder = ({ onTranscriptionComplete }) => {
+interface AudioRecorderProps {
+  onTranscriptionComplete: (text: string, versionMismatch?: boolean, apiVersion?: string) => void;
+}
+
+const AudioRecorder: React.FC<AudioRecorderProps> = ({ onTranscriptionComplete }) => {
   const [isRecording, setIsRecording] = useState(false);
   const [mediaRecorder, setMediaRecorder] = useState<MediaRecorder | null>(
     null
@@ -57,22 +62,37 @@ const AudioRecorder = ({ onTranscriptionComplete }) => {
 
       recorder.onstop = async () => {
         const audioBlob = new Blob(audioChunks, { type: "audio/wav" });
-        const formData = new FormData();
-        formData.append("audio", audioBlob);
 
         try {
           // Show loading state when transcription begins
           setIsTranscribing(true);
           
-          // TODO: Use APIService for api requests
-          const response = await fetch("http://localhost:8000/transcribe", {
-            method: "POST",
-            body: formData,
-          });
-          const data = await response.json();
-          onTranscriptionComplete(data.transcription);
+          // Use APIService for API requests
+          const response = await APIService.transcribeAudio(audioBlob);
+          
+          if (response.error) {
+            console.error("Error transcribing audio:", response.error);
+            onTranscriptionComplete("Error transcribing audio");
+          } else if (response.data) {
+            // Extract transcription text from the response data
+            let transcriptionText: string;
+            if (typeof response.data === 'string') {
+              transcriptionText = response.data;
+            } else if (response.data && typeof response.data === 'object' && 'transcription' in response.data) {
+              transcriptionText = (response.data as any).transcription;
+            } else {
+              transcriptionText = "Transcription completed";
+            }
+            // Pass transcription text and version mismatch info
+            onTranscriptionComplete(
+              transcriptionText, 
+              response.versionMismatch, 
+              response.apiVersion
+            );
+          }
         } catch (error) {
           console.error("Error sending audio:", error);
+          onTranscriptionComplete("Error transcribing audio");
         } finally {
           // Hide loading state when transcription completes (success or error)
           setIsTranscribing(false);

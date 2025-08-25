@@ -7,13 +7,12 @@ from typing import Dict, Optional, Literal
 app = Flask(__name__)
 CORS(app)
 
-# TODO: Implement version tracking
 VERSION = "1.0.0"
 
 
 def process_transcription(job_id: str, audio_data: bytes):
     """Mock function to simulate async transcription processing. Returns a random transcription."""
-    time.sleep(random.randint(5, 20))
+    time.sleep(random.randint(1, 2))
     return random.choice([
         "I've always been fascinated by cars, especially classic muscle cars from the 60s and 70s. The raw power and beautiful design of those vehicles is just incredible.",
         "Bald eagles are such majestic creatures. I love watching them soar through the sky and dive down to catch fish. Their white heads against the blue sky is a sight I'll never forget.",
@@ -43,15 +42,25 @@ def get_user_model_from_db(user_id: str) -> Literal["openai", "anthropic"]:
 
 @app.route('/transcribe', methods=['POST'])
 def transcribe_audio():
+    # Get client version from headers
+    client_version = request.headers.get('X-Client-Version', 'unknown')
+    user_id = request.headers.get('X-User-ID', 'unknown')
+    
     result = process_transcription("xyz", "abcde")
 
     # TODO: Implement categorization
     # result = categorize_transcription(result, "user_id")
 
-    return jsonify({
+    response = jsonify({
         "transcription": result,
+        "version": VERSION,
         # TODO: Add category
     })
+    
+    # Add version header
+    response.headers['X-API-Version'] = VERSION
+    
+    return response
 
 
 if __name__ == '__main__':
