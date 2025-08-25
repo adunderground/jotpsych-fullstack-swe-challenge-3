@@ -39,6 +39,35 @@ App.tsx now calls getUserID if no user ID found it will call the backend to gene
 All API calls now include userID in headers. 
 
 Challenge #6
+app.py now has a "categorize_transcription" method that checks user's prefered ai model and based on the preference calls the "categorize_transcription" method. this is where Cursor started hallucinating pretty badly and I didn't have time to debug/improve it. I think overall this challenges asks for a clear prompt that we send over to the preferred LLM with our request, somethink like:  
+~~~
+You are an expert content analyst. Analyze the following transcription and categorize it into specific interest areas.
+
+IMPORTANT: You must respond with ONLY a valid JSON object. No additional text, explanations, or markdown formatting.
+
+REQUIRED JSON STRUCTURE:
+{{
+    "primary_interest": "string - the main category this content belongs to",
+    "confidence": float - confidence score between 0.0 and 1.0,
+    "subcategories": ["array", "of", "specific", "subcategories"],
+    "sentiment": "positive|negative|neutral",
+    "topics": ["array", "of", "related", "topics"]
+}}
+
+ANALYSIS GUIDELINES:
+- primary_interest: Choose from: Automotive, Wildlife, Marine Exploration, Technology, Sports, Arts, Science, Travel, Food, Music, Literature, or other relevant categories
+- confidence: Base on how clearly the content fits the category (0.0 = unclear, 1.0 = very clear)
+- subcategories: 2-4 specific subcategories that refine the main interest
+- sentiment: Analyze emotional tone and enthusiasm in the content
+- topics: 3-5 related academic or practical topics
+
+TRANSCRIPTION TO ANALYZE:
+"{transcription}"
+
+RESPONSE FORMAT: Return ONLY the JSON object, no other text.
+"""
+
+~~~
 
 
 Challenge #7 

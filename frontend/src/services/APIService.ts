@@ -16,6 +16,14 @@ interface JobResponse {
   version: string;
 }
 
+interface TranscriptionCategories {
+  primary_interest: string;
+  confidence: number;
+  subcategories: string[];
+  sentiment: string;
+  topics: string[];
+}
+
 interface JobStatusResponse {
   job_id: string;
   status: 'pending' | 'processing' | 'completed' | 'failed';
@@ -23,6 +31,7 @@ interface JobStatusResponse {
   started_at?: string;
   completed_at?: string;
   result?: string;
+  categories?: TranscriptionCategories;  // NEW: Categorization result
   error?: string;
 }
 

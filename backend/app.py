@@ -28,7 +28,7 @@ class JobStatus:
     COMPLETED = "completed"
     FAILED = "failed"
 
-def process_transcription(job_id: str, audio_data: bytes):
+def process_transcription(job_id: str, audio_data: bytes, user_id: str = "unknown"):
     """Mock function to simulate async transcription processing. Returns a random transcription."""
     try:
         # Simulate processing time
@@ -41,11 +41,16 @@ def process_transcription(job_id: str, audio_data: bytes):
             "Deep sea diving opens up a whole new world of exploration. The mysterious creatures and stunning coral reefs you encounter at those depths are unlike anything else on Earth."
         ])
         
-        # Update job status to completed
+        # NEW: Add categorization step
+        print(f"Processing transcription for job {job_id}, user {user_id}")
+        categories = categorize_transcription(result, user_id)
+        
+        # Update job status to completed with both transcription and categories
         with job_lock:
             if job_id in jobs:
                 jobs[job_id]["status"] = JobStatus.COMPLETED
                 jobs[job_id]["result"] = result
+                jobs[job_id]["categories"] = categories
                 jobs[job_id]["completed_at"] = datetime.now().isoformat()
         
         return result
@@ -58,7 +63,7 @@ def process_transcription(job_id: str, audio_data: bytes):
                 jobs[job_id]["completed_at"] = datetime.now().isoformat()
         raise
 
-def submit_transcription_job(audio_data: bytes) -> str:
+def submit_transcription_job(audio_data: bytes, user_id: str = "unknown") -> str:
     """Submit a new transcription job and return job ID"""
     job_id = str(uuid.uuid4())
     
@@ -71,6 +76,7 @@ def submit_transcription_job(audio_data: bytes) -> str:
         "started_at": None,
         "completed_at": None,
         "result": None,
+        "categories": None,  # NEW: Categorization result
         "error": None
     }
     
@@ -84,7 +90,7 @@ def submit_transcription_job(audio_data: bytes) -> str:
                 jobs[job_id]["status"] = JobStatus.PROCESSING
                 jobs[job_id]["started_at"] = datetime.now().isoformat()
         
-        process_transcription(job_id, audio_data)
+        process_transcription(job_id, audio_data, user_id)
     
     executor.submit(process_job)
     
@@ -138,15 +144,90 @@ def cleanup_old_jobs():
 #     """Gracefully shutdown the thread pool executor"""
 #     executor.shutdown(wait=True)
 
-def categorize_transcription(transcription_string: str, user_id: str):
-    # TODO: Implement transcription categorization
-    model_to_use = get_user_model_from_db(user_id)
-    if model_to_use == "openai":
-        # TODO: Implement OpenAI categorization
-        pass
-    elif model_to_use == "anthropic":
-        # TODO: Implement Anthropic categorization
-        pass
+def analyze_content_for_categories(transcription: str) -> dict:
+    """Analyze transcription content and return categories"""
+    categories = {
+        "primary_interest": "",
+        "confidence": 0.0,
+        "subcategories": [],
+        "sentiment": "neutral",
+        "topics": []
+    }
+    
+    # Analyze transcription content
+    text_lower = transcription.lower()
+    
+    if "car" in text_lower or "vehicle" in text_lower or "muscle" in text_lower:
+        categories["primary_interest"] = "Automotive"
+        categories["confidence"] = 0.85
+        categories["subcategories"] = ["Classic Cars", "Muscle Cars"]
+        categories["topics"] = ["Automotive History", "Vehicle Design"]
+    elif "eagle" in text_lower or "bird" in text_lower or "majestic" in text_lower:
+        categories["primary_interest"] = "Wildlife"
+        categories["confidence"] = 0.90
+        categories["subcategories"] = ["Birds of Prey", "Wildlife Observation"]
+        categories["topics"] = ["Nature", "Wildlife Photography"]
+    elif "diving" in text_lower or "ocean" in text_lower or "sea" in text_lower:
+        categories["primary_interest"] = "Marine Exploration"
+        categories["confidence"] = 0.88
+        categories["subcategories"] = ["Scuba Diving", "Marine Biology"]
+        categories["topics"] = ["Oceanography", "Underwater Photography"]
+    
+    # Add sentiment analysis
+    if any(word in text_lower for word in ["love", "fascinated", "incredible", "majestic", "beautiful"]):
+        categories["sentiment"] = "positive"
+    
+    return categories
+
+def validate_and_format_categories(categories: dict) -> dict:
+    """Ensure categories have proper structure and types"""
+    required_fields = ["primary_interest", "confidence", "subcategories", "sentiment", "topics"]
+    
+    for field in required_fields:
+        if field not in categories:
+            categories[field] = "unknown" if field == "primary_interest" else [] if field in ["subcategories", "topics"] else 0.0
+    
+    # Validate data types
+    if not isinstance(categories["confidence"], (int, float)):
+        categories["confidence"] = 0.0
+    
+    if not isinstance(categories["subcategories"], list):
+        categories["subcategories"] = []
+    
+    if not isinstance(categories["topics"], list):
+        categories["topics"] = []
+    
+    return categories
+
+def mock_openai_categorization(transcription: str) -> dict:
+    """Mock OpenAI API categorization"""
+    time.sleep(random.randint(1, 3))  # Simulate API delay
+    categories = analyze_content_for_categories(transcription)
+    return validate_and_format_categories(categories)
+
+def mock_anthropic_categorization(transcription: str) -> dict:
+    """Mock Anthropic API categorization"""
+    time.sleep(random.randint(1, 3))  # Simulate API delay
+    categories = analyze_content_for_categories(transcription)
+    return validate_and_format_categories(categories)
+
+def categorize_transcription(transcription: str, user_id: str) -> dict:
+    """Categorize transcription using user's preferred LLM model"""
+    try:
+        # Get user's preferred LLM model
+        model = get_user_model_from_db(user_id)
+        print(f"User {user_id} using {model} model for categorization")
+        
+        # Mock AI categorization based on model
+        if model == "openai":
+            return mock_openai_categorization(transcription)
+        elif model == "anthropic":
+            return mock_anthropic_categorization(transcription)
+        else:
+            return {"error": "Unknown model"}
+    except Exception as e:
+        print(f"Error in categorization: {e}")
+        return {"error": str(e)}
 
 def get_user_model_from_db(user_id: str) -> Literal["openai", "anthropic"]:
     """
@@ -191,7 +272,7 @@ def transcribe_audio():
     #     return jsonify({"error": "Rate limit exceeded"}), 429
     
     # Submit job for processing
-    job_id = submit_transcription_job(audio_data)
+    job_id = submit_transcription_job(audio_data, user_id)
     
     response = jsonify({
         "job_id": job_id,
@@ -225,6 +306,7 @@ def get_job_status_endpoint(job_id: str):
         "started_at": job["started_at"],
         "completed_at": job["completed_at"],
         "result": job["result"],
+        "categories": job["categories"],  # NEW: Include categories
         "error": job["error"]
     }
     
@@ -252,6 +334,7 @@ def list_jobs():
                 "started_at": job["started_at"],
                 "completed_at": job["completed_at"],
                 "result": job["result"],
+                "categories": job["categories"],  # NEW: Include categories
                 "error": job["error"]
             })
     

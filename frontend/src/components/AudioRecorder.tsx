@@ -1,9 +1,18 @@
 import React, { useState, useEffect } from "react";
 import APIService from "../services/APIService";
+import CategoryDisplay from "./CategoryDisplay";
 
 interface AudioRecorderProps {
   onTranscriptionComplete: (text: string, versionMismatch?: boolean, apiVersion?: string) => void;
   instanceId: string;
+}
+
+interface TranscriptionCategories {
+  primary_interest: string;
+  confidence: number;
+  subcategories: string[];
+  sentiment: string;
+  topics: string[];
 }
 
 interface JobState {
@@ -11,6 +20,7 @@ interface JobState {
   status: 'pending' | 'processing' | 'completed' | 'failed';
   audioBlob: Blob;
   result?: string;
+  categories?: TranscriptionCategories;  // NEW: Categorization result
   error?: string;
   createdAt: Date;
 }
@@ -96,7 +106,7 @@ const AudioRecorder: React.FC<AudioRecorderProps> = ({ onTranscriptionComplete, 
             
             setJobs(prevJobs => prevJobs.map(j => 
               j.jobId === job.jobId 
-                ? { ...j, status: jobStatus.status, result: jobStatus.result, error: jobStatus.error }
+                ? { ...j, status: jobStatus.status, result: jobStatus.result, categories: jobStatus.categories, error: jobStatus.error }
                 : j
             ));
 
@@ -309,6 +319,11 @@ const AudioRecorder: React.FC<AudioRecorderProps> = ({ onTranscriptionComplete, 
                 <p className="text-xs mt-2 text-gray-700 line-clamp-2">
                   {job.result}
                 </p>
+              )}
+              
+              {/* NEW: Display categories when job is completed */}
+              {job.status === 'completed' && job.categories && (
+                <CategoryDisplay categories={job.categories} />
               )}
               
               {job.error && (
