@@ -22,3 +22,11 @@ to test this functionality I updated "clientVersion" in APIService.ts to
 ~~~
 private clientVersion: string = "0.0.9";
 ~~~
+
+Challenge #4
+This is where things got a bit more challenging for me. I brainstormed the solution with Cursor.
+changed the /transcribe endpoint to immediately return job id
+added new endpoint /job-status/<job_id> for polling individual job status
+in APIService.ts we have a new interfaces for checking  job's status and response, and getJobStatus method for status checking. 
+AudioRecorder has instanceId prop for identifying each unique transcription. 
+updated App.tsx to support multiple recording instances simultaneously, display status for each job individually
