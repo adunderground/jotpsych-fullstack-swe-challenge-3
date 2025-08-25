@@ -30,3 +30,10 @@ added new endpoint /job-status/<job_id> for polling individual job status
 in APIService.ts we have a new interfaces for checking  job's status and response, and getJobStatus method for status checking. 
 AudioRecorder has instanceId prop for identifying each unique transcription. 
 updated App.tsx to support multiple recording instances simultaneously, display status for each job individually
+
+Challenge #5
+This part of the challenge I was comfortable with again, thank to my previous exeprience. 
+We first create a new endpoint "/generate-user-id" that generates and returns a uuid4 ID. 
+than we added UserIDService.ts on frontend to hit a new endpoint, get and set the user id 
+App.tsx now calls getUserID if no user ID found it will call the backend to generate one.
+All API calls now include userID in headers. 

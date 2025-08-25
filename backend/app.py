@@ -18,6 +18,10 @@ jobs: Dict[str, Dict] = {}
 job_lock = threading.Lock()
 executor = ThreadPoolExecutor(max_workers=3)  # Limit concurrent jobs
 
+# Simple in-memory user storage for demo purposes
+users = set()
+user_lock = threading.Lock()
+
 class JobStatus:
     PENDING = "pending"
     PROCESSING = "processing"
@@ -158,6 +162,9 @@ def transcribe_audio():
     client_version = request.headers.get('X-Client-Version', 'unknown')
     user_id = request.headers.get('X-User-ID', 'unknown')
     
+    # Simple user ID logging
+    print(f"User {user_id} submitted transcription")
+    
     # TODO: PRODUCTION CONSIDERATIONS - Add input validation
     # if not audio_file or audio_file.filename == '':
     #     return jsonify({"error": "No audio file provided"}), 400
@@ -249,6 +256,14 @@ def list_jobs():
             })
     
     return jsonify({"jobs": job_list})
+
+@app.route('/generate-user-id', methods=['GET'])
+def generate_user_id():
+    """Generate a unique user ID for new users"""
+    user_id = str(uuid.uuid4())
+    users.add(user_id)  # Store in memory
+    print(f"Generated user ID: {user_id}")  # Simple logging
+    return jsonify({"user_id": user_id})
 
 # TODO: PRODUCTION CONSIDERATIONS - Add health check endpoint
 # @app.route('/health', methods=['GET'])

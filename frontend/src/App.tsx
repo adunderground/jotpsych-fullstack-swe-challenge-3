@@ -1,7 +1,8 @@
 import React from "react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import AudioRecorder from "./components/AudioRecorder";
 import Toast from "./components/Toast";
+import UserIDService from "./services/UserIDService";
 
 interface RecordingInstance {
   id: string;
@@ -22,6 +23,11 @@ function App() {
     message: "",
     type: "info"
   });
+
+  // Initialize user ID on app start
+  useEffect(() => {
+    UserIDService.getUserID();
+  }, []);
 
   const handleTranscriptionComplete = (text: string, versionMismatch?: boolean, apiVersion?: string, instanceId?: string) => {
     if (instanceId) {

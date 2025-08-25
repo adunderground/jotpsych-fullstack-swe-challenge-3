@@ -1,3 +1,5 @@
+import UserIDService from './UserIDService';
+
 interface APIResponse<T> {
   data?: T;
   error?: string;
@@ -28,7 +30,6 @@ class APIService {
   private baseUrl: string = "http://localhost:8000";
   // private clientVersion: string = "0.0.9"; // for testing version mismatch
   private clientVersion: string = "1.0.0";
-  private userID: string = "1234567890";
 
   // Generic request handler
   private async makeRequest<T>(
@@ -37,10 +38,12 @@ class APIService {
     body?: FormData | object
   ): Promise<APIResponse<T>> {
     try {
+      // Get user ID for this request
+      const userId = await UserIDService.getUserID();
+      
       const headers: HeadersInit = {
-        // TODO: Version and user ID
         "X-Client-Version": this.clientVersion,
-        "X-User-ID": this.userID,
+        "X-User-ID": userId,
       };
 
       // Add Content-Type header if body is a plain object (not FormData)
