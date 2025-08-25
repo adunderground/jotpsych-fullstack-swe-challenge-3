@@ -7,9 +7,27 @@ interface APIResponse<T> {
   apiVersion?: string;
 }
 
+interface JobResponse {
+  job_id: string;
+  status: string;
+  message: string;
+  version: string;
+}
+
+interface JobStatusResponse {
+  job_id: string;
+  status: 'pending' | 'processing' | 'completed' | 'failed';
+  created_at: string;
+  started_at?: string;
+  completed_at?: string;
+  result?: string;
+  error?: string;
+}
+
 class APIService {
   private baseUrl: string = "http://localhost:8000";
-  private clientVersion: string = "0.0.9";
+  // private clientVersion: string = "0.0.9"; // for testing version mismatch
+  private clientVersion: string = "1.0.0";
   private userID: string = "1234567890";
 
   // Generic request handler
@@ -58,7 +76,20 @@ class APIService {
     }
   }
 
-  // Updated transcribeAudio using the generic request handler
+  // Submit a new transcription job
+  async submitTranscriptionJob(audioBlob: Blob): Promise<APIResponse<JobResponse>> {
+    const formData = new FormData();
+    formData.append("audio", audioBlob);
+
+    return this.makeRequest<JobResponse>("/transcribe", "POST", formData);
+  }
+
+  // Get the status of a specific job
+  async getJobStatus(jobId: string): Promise<APIResponse<JobStatusResponse>> {
+    return this.makeRequest<JobStatusResponse>(`/job-status/${jobId}`, "GET");
+  }
+
+  // Legacy method for backward compatibility (returns job-based response now)
   async transcribeAudio(audioBlob: Blob): Promise<APIResponse<string>> {
     const formData = new FormData();
     formData.append("audio", audioBlob);
