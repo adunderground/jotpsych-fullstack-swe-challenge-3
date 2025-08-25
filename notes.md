@@ -37,3 +37,13 @@ We first create a new endpoint "/generate-user-id" that generates and returns a 
 than we added UserIDService.ts on frontend to hit a new endpoint, get and set the user id 
 App.tsx now calls getUserID if no user ID found it will call the backend to generate one.
 All API calls now include userID in headers. 
+
+Challenge #6
+
+
+Challenge #7 
+I'd have to read up on the best practices on how to cache/identify delta between LLM calls to optimize the process for challenge #7. 
+
+Challenge #8 
+I was very excited to work on this one because I got a ton of experience on the front end and have some really fun experiments with Cursor generated pretty front-end applications. Check out my latest fun project where I got to use some pre made components as well as openai-gpt-image-mcp to beautify it – https://pizzapass.surge.sh/
+
