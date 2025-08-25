@@ -23,18 +23,24 @@ const AudioRecorder = ({ onTranscriptionComplete }) => {
 
     if (isRecording) {
       interval = setInterval(() => {
-        if (recordingTime >= MAX_RECORDING_TIME) {
-          stopRecording();
-        } else {
-          setRecordingTime(recordingTime + 1);
-        }
+        setRecordingTime((prevTime) => {
+          const newTime = prevTime + 1;
+          if (newTime >= MAX_RECORDING_TIME) {
+            // Auto-stop when reaching max time
+            setTimeout(() => stopRecording(), 0);
+            return prevTime; 
+          }
+          return newTime;
+        });
       }, 1000);
     }
 
     return () => {
-      clearInterval(interval);
+      if (interval) {
+        clearInterval(interval);
+      }
     };
-  }, [isRecording]);
+  }, [isRecording]); 
 
   const startRecording = async () => {
     try {
@@ -92,7 +98,7 @@ const AudioRecorder = ({ onTranscriptionComplete }) => {
         }`}
       >
         {isRecording
-          ? `Stop Recording (${5 - recordingTime}s)`
+          ? `Stop Recording (${MAX_RECORDING_TIME - recordingTime}s)`
           : "Start Recording"}
       </button>
       {isRecording && (
