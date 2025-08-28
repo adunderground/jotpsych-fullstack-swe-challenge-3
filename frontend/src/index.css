@@ -25,6 +25,7 @@
   body {
     font-family: 'Space Grotesk', 'Inter', 'Roboto', 'Open Sans', sans-serif;
     color: var(--color-text-primary);
+    background-color: #0a0a0a;
   }
   
   .font-secondary {

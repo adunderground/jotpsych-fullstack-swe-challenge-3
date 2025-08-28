@@ -69,15 +69,12 @@ function App() {
   };
 
   return (
-    <div className="min-h-screen relative">
-      {/* Background with gradient */}
-      <div className="fixed inset-0 bg-gradient-to-br from-primary-start to-primary-end" />
-      
+    <div className="min-h-screen relative bg-gray-950">
       {/* Background Cells */}
-      <BackgroundCells className="fixed inset-0">
+      <BackgroundCells className="absolute inset-0">
         <div className="relative z-50 pointer-events-auto">
-          {/* Hero Text */}
-          <div className="pt-16 pb-8">
+          {/* Hero Text - moved much higher */}
+          <div className="pt-4 pb-8">
             <HeroText />
           </div>
           

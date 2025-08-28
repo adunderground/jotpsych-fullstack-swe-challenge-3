@@ -436,9 +436,9 @@ export const SparklesCore = (props: ParticlesProps) => {
 
 export function HeroText() {
   return (
-    <div className="h-[20rem] w-full flex flex-col items-center justify-center overflow-hidden">
-      <h1 className="md:text-5xl text-3xl lg:text-7xl font-bold text-center bg-clip-text text-transparent bg-gradient-to-b from-neutral-100 to-neutral-400 relative z-20">
-        JotPsych x AD Challenge
+    <div className="h-[10rem] w-full flex flex-col items-center justify-center overflow-hidden">
+      <h1 className="md:text-5xl text-3xl lg:text-7xl font-bold text-center bg-clip-text text-transparent bg-gradient-to-r from-primary-start via-primary-end to-cta relative z-20">
+        JotPsych Challenge x AD
       </h1>
       <div className="w-[40rem] h-40 relative">
         {/* Gradients */}
