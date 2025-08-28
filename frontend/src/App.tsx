@@ -132,7 +132,7 @@ function App() {
           </div>
 
           {/* Footer */}
-          <div className="mt-24 pointer-events-none">
+          <div className="mt-24 pointer-events-auto">
             <Footer />
           </div>
         </div>
