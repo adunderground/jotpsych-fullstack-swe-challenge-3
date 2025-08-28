@@ -436,29 +436,34 @@ export const SparklesCore = (props: ParticlesProps) => {
 
 export function HeroText() {
   return (
-    <div className="h-[10rem] w-full flex flex-col items-center justify-center overflow-hidden">
-      <h1 className="md:text-5xl text-3xl lg:text-7xl font-bold text-center bg-clip-text text-transparent bg-gradient-to-r from-primary-start via-primary-end to-cta relative z-20">
+    <div className="h-[12rem] w-full flex flex-col items-center justify-center relative">
+      {/* Text layer - higher z-index to be on top */}
+      <h1 className="md:text-5xl text-3xl lg:text-7xl font-bold text-center bg-clip-text text-transparent bg-gradient-to-r from-primary-start via-primary-end to-cta relative z-30">
         JotPsych Challenge x AD
       </h1>
-      <div className="w-[40rem] h-40 relative">
-        {/* Gradients */}
-        <div className="absolute inset-x-20 top-0 bg-gradient-to-r from-transparent via-indigo-500 to-transparent h-[2px] w-3/4 blur-sm" />
-        <div className="absolute inset-x-20 top-0 bg-gradient-to-r from-transparent via-indigo-500 to-transparent h-px w-3/4" />
-        <div className="absolute inset-x-60 top-0 bg-gradient-to-r from-transparent via-sky-500 to-transparent h-[5px] w-1/4 blur-sm" />
-        <div className="absolute inset-x-60 top-0 bg-gradient-to-r from-transparent via-sky-500 to-transparent h-px w-1/4" />
+      
+      {/* Sparkles layer - positioned to cover the text area */}
+      <div className="absolute inset-0 w-full h-full flex items-center justify-center z-20">
+        <div className="w-[50rem] h-32 relative">
+          {/* Gradients */}
+          <div className="absolute inset-x-20 top-1/2 -translate-y-1/2 bg-gradient-to-r from-transparent via-indigo-500 to-transparent h-[2px] w-3/4 blur-sm" />
+          <div className="absolute inset-x-20 top-1/2 -translate-y-1/2 bg-gradient-to-r from-transparent via-indigo-500 to-transparent h-px w-3/4" />
+          <div className="absolute inset-x-60 top-1/2 -translate-y-1/2 bg-gradient-to-r from-transparent via-sky-500 to-transparent h-[5px] w-1/4 blur-sm" />
+          <div className="absolute inset-x-60 top-1/2 -translate-y-1/2 bg-gradient-to-r from-transparent via-sky-500 to-transparent h-px w-1/4" />
 
-        {/* Core component */}
-        <SparklesCore
-          background="transparent"
-          minSize={0.4}
-          maxSize={1}
-          particleDensity={1200}
-          className="w-full h-full"
-          particleColor="#FFFFFF"
-        />
+          {/* Core sparkles component */}
+          <SparklesCore
+            background="transparent"
+            minSize={0.4}
+            maxSize={1.2}
+            particleDensity={800}
+            className="w-full h-full"
+            particleColor="#FFFFFF"
+          />
 
-        {/* Radial Gradient to prevent sharp edges */}
-        <div className="absolute inset-0 w-full h-full [mask-image:radial-gradient(350px_200px_at_top,transparent_20%,white)]"></div>
+          {/* Radial Gradient to prevent sharp edges */}
+          <div className="absolute inset-0 w-full h-full [mask-image:radial-gradient(400px_150px_at_center,transparent_30%,white)]"></div>
+        </div>
       </div>
     </div>
   );

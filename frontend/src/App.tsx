@@ -73,8 +73,8 @@ function App() {
       {/* Background Cells */}
       <BackgroundCells className="absolute inset-0">
         <div className="relative z-50 pointer-events-auto">
-          {/* Hero Text - moved much higher */}
-          <div className="pt-4 pb-8">
+          {/* Hero Text - properly positioned */}
+          <div className="pt-16 pb-12">
             <HeroText />
           </div>
           
