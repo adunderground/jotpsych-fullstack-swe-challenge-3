@@ -33,6 +33,7 @@ const ModernAudioRecorder: React.FC<ModernAudioRecorderProps> = ({
   instanceId 
 }) => {
   const [isRecording, setIsRecording] = useState(false);
+  const [isPaused, setIsPaused] = useState(false);
   const [mediaRecorder, setMediaRecorder] = useState<MediaRecorder | null>(null);
   const [recordingTime, setRecordingTime] = useState(0);
   const [, setFinalRecordingTime] = useState(0);
@@ -46,12 +47,24 @@ const ModernAudioRecorder: React.FC<ModernAudioRecorderProps> = ({
       mediaRecorder.stop();
       setFinalRecordingTime(recordingTime);
       setIsRecording(false);
+      setIsPaused(false);
+    }
+  };
+
+  const pauseRecording = () => {
+    if (mediaRecorder && mediaRecorder.state === "recording") {
+      mediaRecorder.pause();
+      setIsPaused(true);
+    } else if (mediaRecorder && mediaRecorder.state === "paused") {
+      mediaRecorder.resume();
+      setIsPaused(false);
     }
   };
 
   const startRecording = async () => {
     try {
       setRecordingTime(0);
+      setIsPaused(false);
       const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
       const recorder = new MediaRecorder(stream);
       const audioChunks: Blob[] = [];
@@ -120,7 +133,7 @@ const ModernAudioRecorder: React.FC<ModernAudioRecorderProps> = ({
   useEffect(() => {
     let interval: ReturnType<typeof setInterval>;
 
-    if (isRecording) {
+    if (isRecording && !isPaused) {
       interval = setInterval(() => {
         setRecordingTime((prevTime) => {
           const newTime = prevTime + 1;
@@ -138,7 +151,7 @@ const ModernAudioRecorder: React.FC<ModernAudioRecorderProps> = ({
         clearInterval(interval);
       }
     };
-  }, [isRecording]);
+  }, [isRecording, isPaused]);
 
   // Poll job statuses
   useEffect(() => {
@@ -220,7 +233,7 @@ const ModernAudioRecorder: React.FC<ModernAudioRecorderProps> = ({
         </p>
         {isRecording && (
           <p className="text-sm text-gray-500 mt-1">
-            Recording: {recordingTime}s / {MAX_RECORDING_TIME}s
+            {isPaused ? "Paused" : "Recording"}: {recordingTime}s / {MAX_RECORDING_TIME}s
           </p>
         )}
       </div>
@@ -234,8 +247,10 @@ const ModernAudioRecorder: React.FC<ModernAudioRecorderProps> = ({
 
       {/* Control Buttons - only show pause/stop, no parallel button */}
       <ControlButtons 
+        onPause={isRecording ? pauseRecording : undefined}
         onStop={isRecording ? stopRecording : undefined}
         isRecording={isRecording}
+        isPaused={isPaused}
         showParallelButton={false}
       />
 
