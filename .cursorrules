@@ -1,0 +1,42 @@
+# .cursorrules
+
+## Purpose
+These rules define how Cursor AI should operate within this repository.  
+They enforce coding standards, architectural conventions, and ensure that all code generated or modified is tested and aligned with our design system.
+
+---
+
+## AI Behavior
+- Always use **sequential-thinking MCP** when reasoning about changes.  
+- Always consult **context7 MCP** to retrieve library documentation before using external APIs, packages, or frameworks.  
+- All UI-related changes must be tested and validated using **Playwright MCP**.  
+
+---
+
+## Code Style
+- Use clear, readable code over clever hacks.  
+- Follow project conventions for formatting (respect Prettier/ESLint configs if present).  
+- Write self-documenting code: meaningful variable names, concise functions, avoid unnecessary abstraction.
+
+---
+
+## Architecture
+- Organize components under `/components/` with one folder per component.  
+- Keep it simple, this is a test repository so don't overengineer your solutions. But do write clear, readable code.
+- Avoid unnecessary dependencies—use only libraries already approved in `package.json` unless explicitly instructed.
+
+---
+
+## Design System
+- All UI must follow tokens defined in `/docs/` folder.  
+- Use Tailwind for styling. No inline CSS except for dynamic values not supported by Tailwind.  
+- Maintain consistent typography, spacing, and colors as defined in the design guide.
+- This Web App needs to responsive and look great in both web and mobile.
+
+---
+
+## Quality & Testing
+- When prompted to QA all tests must trigger **Playwright MCP** to verify UI. 
+- Ensure accessibility (ARIA roles, keyboard navigation, semantic HTML).
+
+---
