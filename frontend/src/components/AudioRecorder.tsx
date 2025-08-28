@@ -52,7 +52,7 @@ const AudioRecorder: React.FC<AudioRecorderProps> = ({ onTranscriptionComplete, 
   };
 
   useEffect(() => {
-    let interval;
+    let interval: ReturnType<typeof setInterval>;
 
     if (isRecording) {
       interval = setInterval(() => {

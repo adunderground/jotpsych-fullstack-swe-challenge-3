@@ -1,6 +1,9 @@
-import React from "react";
 import { useState, useEffect } from "react";
-import AudioRecorder from "./components/AudioRecorder";
+import { BackgroundCells } from "./components/ui/background-cells";
+import { HeroText } from "./components/ui/sparkles";
+import { ControlButtons } from "./components/ui/control-buttons";
+import { Footer } from "./components/ui/footer";
+import ModernAudioRecorder from "./components/ModernAudioRecorder";
 import Toast from "./components/Toast";
 import UserIDService from "./services/UserIDService";
 
@@ -10,7 +13,7 @@ interface RecordingInstance {
 }
 
 function App() {
-  const [transcriptions, setTranscriptions] = useState<{ [key: string]: string }>({});
+  const [, setTranscriptions] = useState<{ [key: string]: string }>({});
   const [recordingInstances, setRecordingInstances] = useState<RecordingInstance[]>([
     { id: "1", isActive: true }
   ]);
@@ -66,69 +69,68 @@ function App() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center p-4">
-      <h1 className="text-2xl font-bold mb-8">Audio Transcription Demo</h1>
+    <div className="min-h-screen relative">
+      {/* Background with gradient */}
+      <div className="fixed inset-0 bg-gradient-to-br from-primary-start to-primary-end" />
       
-      <Toast
-        message={toast.message}
-        type={toast.type}
-        isVisible={toast.isVisible}
-        onClose={closeToast}
-      />
-
-      {/* Recording Instances */}
-      <div className="w-full max-w-4xl space-y-6">
-        {recordingInstances.map((instance) => (
-          <div key={instance.id} className="border border-gray-200 rounded-lg p-6 bg-white shadow-sm">
-            <div className="flex items-center justify-between mb-4">
-              <h3 className="text-lg font-semibold text-gray-800">
-                Recording Instance {instance.id}
-              </h3>
-              {recordingInstances.length > 1 && (
-                <button
-                  onClick={() => removeRecordingInstance(instance.id)}
-                  className="px-3 py-1 text-sm text-red-600 hover:text-red-800 hover:bg-red-50 rounded-md transition-colors"
-                >
-                  Remove
-                </button>
-              )}
-            </div>
-            
-            <AudioRecorder 
-              onTranscriptionComplete={(text, versionMismatch, apiVersion) => 
-                handleTranscriptionComplete(text, versionMismatch, apiVersion, instance.id)
-              }
-              instanceId={instance.id}
-            />
-            
-            {transcriptions[instance.id] && (
-              <div className="mt-4 p-4 bg-gray-50 rounded-lg border border-gray-200">
-                <h4 className="font-semibold mb-2 text-gray-700">Transcription {instance.id}:</h4>
-                <p className="text-gray-800">{transcriptions[instance.id]}</p>
-              </div>
-            )}
+      {/* Background Cells */}
+      <BackgroundCells className="fixed inset-0">
+        <div className="relative z-50 pointer-events-auto">
+          {/* Hero Text */}
+          <div className="pt-16 pb-8">
+            <HeroText />
           </div>
-        ))}
-      </div>
+          
+          {/* Main Content Container */}
+          <div className="container mx-auto px-4 max-w-6xl">
+            <Toast
+              message={toast.message}
+              type={toast.type}
+              isVisible={toast.isVisible}
+              onClose={closeToast}
+            />
 
-      {/* Add New Recording Instance Button */}
-      <div className="mt-6">
-        <button
-          onClick={addRecordingInstance}
-          className="px-6 py-3 bg-green-500 hover:bg-green-600 text-white font-semibold rounded-lg transition-colors"
-        >
-          + Add Another Recording
-        </button>
-      </div>
+            {/* Recording Instances */}
+            <div className="space-y-12">
+              {recordingInstances.map((instance) => (
+                <div key={instance.id} className="relative">
+                  {/* Remove button for multiple instances */}
+                  {recordingInstances.length > 1 && (
+                    <div className="absolute top-0 right-0 z-10">
+                      <button
+                        onClick={() => removeRecordingInstance(instance.id)}
+                        className="px-3 py-1 text-sm text-red-600 hover:text-red-800 bg-white/90 hover:bg-red-50 rounded-md transition-colors shadow-sm"
+                      >
+                        Remove Instance {instance.id}
+                      </button>
+                    </div>
+                  )}
+                  
+                  {/* Modern Audio Recorder */}
+                  <ModernAudioRecorder 
+                    onTranscriptionComplete={(text, versionMismatch, apiVersion) => 
+                      handleTranscriptionComplete(text, versionMismatch, apiVersion, instance.id)
+                    }
+                    instanceId={instance.id}
+                  />
+                </div>
+              ))}
+            </div>
 
-      {/* Instructions */}
-      <div className="mt-8 text-center text-gray-600 max-w-2xl">
-        <p className="text-sm">
-          💡 <strong>Tip:</strong> You can record multiple messages simultaneously! 
-          Start a recording in one instance while another is processing. 
-          Each instance works independently and shows real-time progress.
-        </p>
-      </div>
+            {/* Global Add Recording Button */}
+            <div className="mt-16 text-center">
+              <ControlButtons 
+                onAddRecording={addRecordingInstance}
+              />
+            </div>
+
+            {/* Footer */}
+            <div className="mt-24">
+              <Footer />
+            </div>
+          </div>
+        </div>
+      </BackgroundCells>
     </div>
   );
 }

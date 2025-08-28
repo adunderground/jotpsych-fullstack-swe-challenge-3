@@ -1,3 +1,76 @@
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300..700&family=Wix+Madefor+Text:ital,wght@0,400..800;1,400..800&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer base {
+  :root {
+    /* Color Tokens from design.md */
+    --color-primary-start: #5a2d8c; /* deep purple */
+    --color-primary-end: #e83f80; /* pink */
+    --color-cta: #f25068; /* coral */
+    --color-text-primary: #1a1a1a; /* near-black */
+    --color-bg-light: #f8f8f8;
+    --color-accent-light: #cbb4e3; /* light lavender */
+    
+    /* Ripple effect colors */
+    --ripple-color: oklch(0.145 0 0 / 0.3);
+  }
+  
+  .dark {
+    --ripple-color: oklch(0.985 0 0 / 0.4);
+  }
+  
+  body {
+    font-family: 'Space Grotesk', 'Inter', 'Roboto', 'Open Sans', sans-serif;
+    color: var(--color-text-primary);
+  }
+  
+  .font-secondary {
+    font-family: 'Wix Madefor Text', 'Inter', 'Roboto', 'Open Sans', sans-serif;
+  }
+}
+
+@layer utilities {
+  /* Custom animations for ripple effect */
+  @keyframes js-ripple-animation {
+    0% { transform: scale(0); opacity: 0.3; }
+    100% { transform: scale(1); opacity: 0; }
+  }
+  
+  .animate-js-ripple-effect { 
+    animation: js-ripple-animation var(--ripple-duration, 600ms) ease-out forwards; 
+  }
+  
+  /* Star movement animations for record button */
+  @keyframes star-movement-bottom {
+    0% {
+      transform: translate(0%, 0%);
+      opacity: 1;
+    }
+    100% {
+      transform: translate(-100%, 0%);
+      opacity: 0;
+    }
+  }
+
+  @keyframes star-movement-top {
+    0% {
+      transform: translate(0%, 0%);
+      opacity: 1;
+    }
+    100% {
+      transform: translate(100%, 0%);
+      opacity: 0;
+    }
+  }
+  
+  .animate-star-movement-bottom {
+    animation: star-movement-bottom linear infinite alternate;
+  }
+  
+  .animate-star-movement-top {
+    animation: star-movement-top linear infinite alternate;
+  }
+}
