@@ -11,11 +11,13 @@ interface BackgroundCellsProps {
 
 export const BackgroundCells = ({ children, className }: BackgroundCellsProps) => {
   return (
-    <div className={cn("relative min-h-screen flex justify-center", className)}>
+    <div className={cn("relative min-h-screen flex justify-center overflow-hidden", className)}>
       <BackgroundCellCore />
       {children && (
         <div className="relative z-50 w-full pointer-events-none select-none">
-          {children}
+          <div className="pointer-events-auto">
+            {children}
+          </div>
         </div>
       )}
     </div>
@@ -43,8 +45,8 @@ const BackgroundCellCore = () => {
       onMouseMove={handleMouseMove}
       className="h-full absolute inset-0"
     >
-      <div className="absolute min-h-full h-full inset-y-0 overflow-hidden">
-        <div className="absolute min-h-full h-full w-full pointer-events-none z-40 bg-gray-900/50" />
+      <div className="absolute h-full w-full inset-0 overflow-hidden">
+        <div className="absolute h-full w-full pointer-events-none -bottom-2 z-40 bg-gray-900/50" />
         <div
           className="absolute inset-0 z-20 bg-transparent"
           style={{
@@ -80,7 +82,7 @@ const Pattern = ({ className, cellClassName }: PatternProps) => {
   const [clickedCell, setClickedCell] = useState<[number, number] | null>(null);
 
   return (
-    <div className={cn("flex flex-row relative z-30", className)}>
+    <div className={cn("flex flex-row relative z-30 pointer-events-auto", className)}>
       {matrix.map((row, rowIdx) => (
         <div
           key={`matrix-row-${rowIdx}`}
@@ -106,7 +108,7 @@ const Pattern = ({ className, cellClassName }: PatternProps) => {
               <div
                 key={`matrix-col-${colIdx}`}
                 className={cn(
-                  "bg-transparent border-l border-b border-neutral-600",
+                  "bg-transparent border-l border-b border-neutral-600 cursor-pointer",
                   cellClassName
                 )}
                 onClick={() => setClickedCell([rowIdx, colIdx])}
@@ -123,7 +125,7 @@ const Pattern = ({ className, cellClassName }: PatternProps) => {
                     ease: "backOut",
                   }}
                   animate={controls}
-                  className="bg-[rgba(14,165,233,0.3)] h-12 w-12"
+                  className="bg-[rgba(14,165,233,0.3)] h-12 w-12 pointer-events-auto"
                 />
               </div>
             );
