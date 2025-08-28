@@ -15,9 +15,7 @@ export const BackgroundCells = ({ children, className }: BackgroundCellsProps) =
       <BackgroundCellCore />
       {children && (
         <div className="relative z-50 w-full pointer-events-none select-none">
-          <div className="pointer-events-auto">
             {children}
-          </div>
         </div>
       )}
     </div>

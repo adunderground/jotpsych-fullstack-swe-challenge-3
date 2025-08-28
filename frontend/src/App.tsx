@@ -72,20 +72,22 @@ function App() {
     <div className="min-h-screen relative bg-gray-950">
       {/* Background Cells */}
       <BackgroundCells className="absolute inset-0">
-        <div className="relative z-50 pointer-events-auto">
-          {/* Hero Text - properly positioned */}
-          <div className="pt-16 pb-12">
+        <div className="relative z-50">
+          {/* Hero Text - properly positioned, allows clicks through */}
+          <div className="pt-16 pb-12 pointer-events-none">
             <HeroText />
           </div>
           
           {/* Main Content Container */}
           <div className="container mx-auto px-4 max-w-6xl">
-            <Toast
-              message={toast.message}
-              type={toast.type}
-              isVisible={toast.isVisible}
-              onClose={closeToast}
-            />
+            <div className="pointer-events-auto">
+              <Toast
+                message={toast.message}
+                type={toast.type}
+                isVisible={toast.isVisible}
+                onClose={closeToast}
+              />
+            </div>
 
             {/* Recording Instances */}
             <div className="space-y-12">
@@ -93,7 +95,7 @@ function App() {
                 <div key={instance.id} className="relative">
                   {/* Remove button for multiple instances */}
                   {recordingInstances.length > 1 && (
-                    <div className="absolute top-0 right-0 z-10">
+                    <div className="absolute top-0 right-0 z-10 pointer-events-auto">
                       <button
                         onClick={() => removeRecordingInstance(instance.id)}
                         className="px-3 py-1 text-sm text-red-600 hover:text-red-800 bg-white/90 hover:bg-red-50 rounded-md transition-colors shadow-sm"
@@ -104,25 +106,27 @@ function App() {
                   )}
                   
                   {/* Modern Audio Recorder */}
-                  <ModernAudioRecorder 
-                    onTranscriptionComplete={(text, versionMismatch, apiVersion) => 
-                      handleTranscriptionComplete(text, versionMismatch, apiVersion, instance.id)
-                    }
-                    instanceId={instance.id}
-                  />
+                  <div className="pointer-events-auto">
+                    <ModernAudioRecorder 
+                      onTranscriptionComplete={(text, versionMismatch, apiVersion) => 
+                        handleTranscriptionComplete(text, versionMismatch, apiVersion, instance.id)
+                      }
+                      instanceId={instance.id}
+                    />
+                  </div>
                 </div>
               ))}
             </div>
 
             {/* Global Add Recording Button */}
-            <div className="mt-16 text-center">
+            <div className="mt-16 text-center pointer-events-auto">
               <ControlButtons 
                 onAddRecording={addRecordingInstance}
               />
             </div>
 
             {/* Footer */}
-            <div className="mt-24">
+            <div className="mt-24 pointer-events-none">
               <Footer />
             </div>
           </div>
