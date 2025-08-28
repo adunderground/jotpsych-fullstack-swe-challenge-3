@@ -108,7 +108,7 @@ const Pattern = ({ className, cellClassName }: PatternProps) => {
               <div
                 key={`matrix-col-${colIdx}`}
                 className={cn(
-                  "bg-transparent border-l border-b border-neutral-600 cursor-pointer",
+                  "bg-transparent border-l border-b border-neutral-600",
                   cellClassName
                 )}
                 onClick={() => setClickedCell([rowIdx, colIdx])}
