@@ -69,8 +69,8 @@ function App() {
   };
 
   return (
-    <div className="min-h-screen relative bg-gray-950">
-      {/* Background Cells */}
+    <div className="relative bg-gray-950">
+      {/* Background Cells - covers entire page */}
       <BackgroundCells className="absolute inset-0">
         <div className="relative z-50">
           {/* Hero Text - properly positioned, allows clicks through */}
@@ -78,7 +78,7 @@ function App() {
             <HeroText />
           </div>
           
-          {/* Main Content Container */}
+          {/* Toast - only in backdrop layer */}
           <div className="container mx-auto px-4 max-w-6xl">
             <div className="pointer-events-auto">
               <Toast
@@ -88,50 +88,55 @@ function App() {
                 onClose={closeToast}
               />
             </div>
-
-            {/* Recording Instances */}
-            <div className="space-y-12">
-              {recordingInstances.map((instance) => (
-                <div key={instance.id} className="relative">
-                  {/* Remove button for multiple instances */}
-                  {recordingInstances.length > 1 && (
-                    <div className="absolute top-0 right-0 z-10 pointer-events-auto">
-                      <button
-                        onClick={() => removeRecordingInstance(instance.id)}
-                        className="px-3 py-1 text-sm text-red-600 hover:text-red-800 bg-white/90 hover:bg-red-50 rounded-md transition-colors shadow-sm"
-                      >
-                        Remove Instance {instance.id}
-                      </button>
-                    </div>
-                  )}
-                  
-                  {/* Modern Audio Recorder */}
-                  <div className="pointer-events-auto">
-                    <ModernAudioRecorder 
-                      onTranscriptionComplete={(text, versionMismatch, apiVersion) => 
-                        handleTranscriptionComplete(text, versionMismatch, apiVersion, instance.id)
-                      }
-                      instanceId={instance.id}
-                    />
-                  </div>
-                </div>
-              ))}
-            </div>
-
-            {/* Global Add Recording Button */}
-            <div className="mt-16 text-center pointer-events-auto">
-              <ControlButtons 
-                onAddRecording={addRecordingInstance}
-              />
-            </div>
-
-            {/* Footer */}
-            <div className="mt-24 pointer-events-none">
-              <Footer />
-            </div>
           </div>
         </div>
       </BackgroundCells>
+      
+      {/* Scrollable content that starts after first screen */}
+      <div className="relative z-40 pt-64 pointer-events-none">
+        <div className="container mx-auto px-4 max-w-6xl">
+          {/* Recording Instances */}
+          <div className="space-y-12 pointer-events-auto">
+            {recordingInstances.map((instance) => (
+              <div key={instance.id} className="relative">
+                {/* Remove button for multiple instances */}
+                {recordingInstances.length > 1 && (
+                  <div className="absolute top-0 right-0 z-10">
+                    <button
+                      onClick={() => removeRecordingInstance(instance.id)}
+                      className="px-3 py-1 text-sm text-red-600 hover:text-red-800 bg-white/90 hover:bg-red-50 rounded-md transition-colors shadow-sm"
+                    >
+                      Remove Instance {instance.id}
+                    </button>
+                  </div>
+                )}
+                
+                {/* Modern Audio Recorder */}
+                <div>
+                  <ModernAudioRecorder 
+                    onTranscriptionComplete={(text, versionMismatch, apiVersion) => 
+                      handleTranscriptionComplete(text, versionMismatch, apiVersion, instance.id)
+                    }
+                    instanceId={instance.id}
+                  />
+                </div>
+              </div>
+            ))}
+          </div>
+
+          {/* Global Add Recording Button */}
+          <div className="mt-16 text-center pointer-events-auto">
+            <ControlButtons 
+              onAddRecording={addRecordingInstance}
+            />
+          </div>
+
+          {/* Footer */}
+          <div className="mt-24 pointer-events-none">
+            <Footer />
+          </div>
+        </div>
+      </div>
     </div>
   );
 }

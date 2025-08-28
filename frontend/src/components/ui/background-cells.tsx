@@ -51,7 +51,7 @@ const BackgroundCellCore = () => {
             maskImage: `radial-gradient(${size / 4}px circle at center, white, transparent)`,
             WebkitMaskImage: `radial-gradient(${size / 4}px circle at center, white, transparent)`,
             WebkitMaskPosition: `${mousePosition.x - size / 2}px ${
-              mousePosition.y - size / 2
+              mousePosition.y - size * 1.44
             }px`,
             WebkitMaskSize: `${size}px`,
             maskSize: `${size}px`,

@@ -232,11 +232,11 @@ const ModernAudioRecorder: React.FC<ModernAudioRecorderProps> = ({
         disabled={false}
       />
 
-      {/* Control Buttons - hide parallel recording button for first instance */}
+      {/* Control Buttons - only show pause/stop, no parallel button */}
       <ControlButtons 
         onStop={isRecording ? stopRecording : undefined}
         isRecording={isRecording}
-        showParallelButton={instanceId !== "1"}
+        showParallelButton={false}
       />
 
       {/* Loading State with Text Shimmer */}
