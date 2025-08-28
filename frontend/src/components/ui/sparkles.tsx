@@ -437,13 +437,13 @@ export const SparklesCore = (props: ParticlesProps) => {
 export function HeroText() {
   return (
     <div className="h-[12rem] w-full flex flex-col items-center justify-center relative overflow-hidden">
-      {/* Text layer - higher z-index to be on top */}
-      <h1 className="md:text-5xl text-3xl lg:text-7xl font-bold text-center bg-clip-text text-transparent bg-gradient-to-r from-primary-start via-primary-end to-cta relative z-30">
+      {/* Text layer - higher z-index to be on top, larger on mobile */}
+      <h1 className="text-4xl md:text-5xl lg:text-7xl font-bold text-center bg-clip-text text-transparent bg-gradient-to-r from-primary-start via-primary-end to-cta relative z-30 px-4">
         JotPsych Challenge x AD
       </h1>
       
-      {/* Sparkles layer - constrained to hero text area only */}
-      <div className="absolute top-0 left-0 w-full h-[12rem] flex items-center justify-center z-20 pointer-events-none">
+      {/* Sparkles layer - hidden on mobile, constrained to hero text area only */}
+      <div className="hidden md:block absolute top-0 left-0 w-full h-[12rem] flex items-center justify-center z-20 pointer-events-none">
         <div className="w-[50rem] h-[8rem] relative">
           {/* Gradients positioned right under text - overlapping lines */}
           <div className="absolute inset-x-20 bottom-10 bg-gradient-to-r from-transparent via-primary-start to-transparent h-[2px] w-3/4 blur-sm" />
