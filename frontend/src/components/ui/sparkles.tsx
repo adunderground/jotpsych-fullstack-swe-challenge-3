@@ -443,7 +443,7 @@ export function HeroText() {
       </h1>
       
       {/* Sparkles layer - hidden on mobile, constrained to hero text area only */}
-      <div className="hidden md:block absolute top-0 left-0 w-full h-[12rem] flex items-center justify-center z-20 pointer-events-none">
+      <div className="sparkles-container absolute top-0 left-0 w-full h-[12rem] flex items-center justify-center z-20 pointer-events-none">
         <div className="w-[50rem] h-[8rem] relative">
           {/* Gradients positioned right under text - overlapping lines */}
           <div className="absolute inset-x-20 bottom-10 bg-gradient-to-r from-transparent via-primary-start to-transparent h-[2px] w-3/4 blur-sm" />

@@ -121,7 +121,7 @@ export const RippleEffect: React.FC<RippleEffectProps> = ({
       <div
         onClick={createRipple}
         // The wrapper inherits the child's className to match its border-radius
-        className={`relative inline-block overflow-hidden cursor-pointer isolate ${child.props.className || ''} ${wrapperClassName || ''}`}
+        className={`relative inline-block overflow-hidden  isolate ${child.props.className || ''} ${wrapperClassName || ''}`}
         {...props}
       >
         <style>{rippleStyles}</style>

@@ -74,4 +74,11 @@
   .animate-star-movement-top {
     animation: star-movement-top linear infinite alternate;
   }
+  
+  /* Hide sparkles on mobile devices */
+  @media (max-width: 767px) {
+    .sparkles-container {
+      display: none !important;
+    }
+  }
 }
