@@ -69,6 +69,20 @@ Active: slight inset or darker gradient.
 
 Mobile: make design responsive and mobile friendly.
 
+5. Layout
+At Follow main-design.png to understand the layout of the page. Page should consist 3 main components. The hero text that uses the hero-text component. it is described and specified in hero-text.md.  It should say "JotPsych x AD Challenge"
+Then there should be a Record Button. it should follow the record-button.md instructions. Right above record button there should be a centered text and it should say Recording instance 1 (number) in secondary font right below it. Remove "Tip" text we don't need it. When click on the red circle record button it should say in actice state. 
+
+ Under the record button there should be three  another secondary less visible buttons that one allows to pause the recording. The other allows to stop the recording. and finally another one that allows to add another recording.
+
+Below Record button should be the "Text-shimmer" component specified in text-shimmer.md. It should Say "Generating..." while we're waiting for the API response. Note that even if backend fails there should be a lorem ipsum text generated with a message that backend failed but here's some placeholdertext.
+
+Below Text shimmer there should be a list of AI summaries specified in a form of an expandable card component. AI Analysys result should be shown in a collapsable card. 
+
+There should be a footer that says "Made with 🤖 by ad_underground" with a link to my github – https://github.com/adunderground
+
+Use Background Cells component specified in backdrop.md for the background/backdrop component.
+
 
 6. Interaction & Motion
 

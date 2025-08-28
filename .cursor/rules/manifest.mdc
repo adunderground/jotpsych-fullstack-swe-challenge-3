@@ -2,7 +2,7 @@
 
 ## Purpose
 These rules define how Cursor AI should operate within this repository.  
-They enforce coding standards, architectural conventions, and ensure that all code generated or modified is tested and aligned with our design system.
+They enforce coding standards, architectural conventions, and ensure that all code generated or modified is tested and aligned with our design system. If the recording fail, for example backend does not respond there should be a logic that says there was an error but still provide a filler lorem ipsum text. 
 
 ---
 
