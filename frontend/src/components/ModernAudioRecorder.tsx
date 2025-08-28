@@ -212,9 +212,12 @@ const ModernAudioRecorder: React.FC<ModernAudioRecorderProps> = ({
     <div className="flex flex-col items-center space-y-8 w-full max-w-2xl mx-auto">
       {/* Instance Counter */}
       <div className="text-center">
-        <h2 className="text-lg font-secondary text-gray-700">
+        {instanceId === "1" && (
+          <h2 className="text-xl font-bold text-white mb-2">Press to record</h2>
+        )}
+        <p className="text-sm font-secondary text-gray-500">
           Recording instance {instanceId}
-        </h2>
+        </p>
         {isRecording && (
           <p className="text-sm text-gray-500 mt-1">
             Recording: {recordingTime}s / {MAX_RECORDING_TIME}s
@@ -229,10 +232,11 @@ const ModernAudioRecorder: React.FC<ModernAudioRecorderProps> = ({
         disabled={false}
       />
 
-      {/* Control Buttons */}
+      {/* Control Buttons - hide parallel recording button for first instance */}
       <ControlButtons 
         onStop={isRecording ? stopRecording : undefined}
         isRecording={isRecording}
+        showParallelButton={instanceId !== "1"}
       />
 
       {/* Loading State with Text Shimmer */}
