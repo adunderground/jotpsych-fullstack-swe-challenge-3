@@ -445,11 +445,11 @@ export function HeroText() {
       {/* Sparkles layer - positioned to cover the text area */}
       <div className="absolute inset-0 w-full h-full flex items-center justify-center z-20">
         <div className="w-[50rem] h-32 relative">
-          {/* Gradients */}
-          <div className="absolute inset-x-20 top-1/2 -translate-y-1/2 bg-gradient-to-r from-transparent via-indigo-500 to-transparent h-[2px] w-3/4 blur-sm" />
-          <div className="absolute inset-x-20 top-1/2 -translate-y-1/2 bg-gradient-to-r from-transparent via-indigo-500 to-transparent h-px w-3/4" />
-          <div className="absolute inset-x-60 top-1/2 -translate-y-1/2 bg-gradient-to-r from-transparent via-sky-500 to-transparent h-[5px] w-1/4 blur-sm" />
-          <div className="absolute inset-x-60 top-1/2 -translate-y-1/2 bg-gradient-to-r from-transparent via-sky-500 to-transparent h-px w-1/4" />
+          {/* Gradients positioned below the text */}
+          <div className="absolute inset-x-20 bottom-4 bg-gradient-to-r from-transparent via-indigo-500 to-transparent h-[2px] w-3/4 blur-sm" />
+          <div className="absolute inset-x-20 bottom-4 bg-gradient-to-r from-transparent via-indigo-500 to-transparent h-px w-3/4" />
+          <div className="absolute inset-x-60 bottom-2 bg-gradient-to-r from-transparent via-sky-500 to-transparent h-[5px] w-1/4 blur-sm" />
+          <div className="absolute inset-x-60 bottom-2 bg-gradient-to-r from-transparent via-sky-500 to-transparent h-px w-1/4" />
 
           {/* Core sparkles component */}
           <SparklesCore
